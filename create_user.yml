@@ -8,7 +8,7 @@
   #   user_name : modi
   
   vars_files:
-    - /home/osaadmin/playbooks/user.yml
+    - /home/osaadmin/playbooks/user.yml:
 
   tasks:
     - name: creating user {{ user_name }}

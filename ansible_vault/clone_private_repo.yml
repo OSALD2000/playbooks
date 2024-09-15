@@ -1,0 +1,20 @@
+---
+
+- name: cloning repo
+  hosts: localhost
+  gather_facts: no
+  become: true
+  vars_files:
+    - git_credentials.yml
+
+  tasks:
+  - name: delete old cloned repo
+    file:
+      path: /home/osaadmin/ansible_test_vault
+      state: absent
+  
+  - name: cloning repo
+    git: 
+      repo: https://OSALD2000:{{ git_token }}@github.com/OSALD2000/ansible_test_vault.git
+      dest: /home/osaadmin/ansible_test_vault
+      update: false
