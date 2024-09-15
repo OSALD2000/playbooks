@@ -1,0 +1,4 @@
+tomcat_url: https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.94/bin/apache-tomcat-9.0.94.tar.gz
+tomcat_package_name: apache-tomcat-9.0.94.tar.gz
+tomcat_dir_name: apache-tomcat-9.0.94
+java_package_name: java-17*

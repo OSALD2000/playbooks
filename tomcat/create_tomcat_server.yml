@@ -1,0 +1,46 @@
+---
+
+- name: playbook to install apache tomcat
+  hosts: webservers
+  become: true
+  gather_facts: yes
+  vars_files:
+    - tomcat_vars.yml
+
+  tasks:
+  - name: downloading tocat package
+    get_url:
+      url: "{{ tomcat_url }}"
+      dest: /opt/
+      mode: 0755
+
+  - name: extract packages
+    unarchive:
+      src: /opt/{{ tomcat_package_name }}
+      dest: /opt
+      remote_src: yes
+    
+  - name: change permissions on apache-tomcat file
+    file:
+      path: /opt/{{ tomcat_dir_name }}
+      mode: 0755
+      recurse: yes
+
+  - name: install java
+    yum:
+      name: "{{ java_package_name }}"
+      state: present
+  
+  - name: Creating symlink for Tomcat startup and shutdown scripts
+    file:
+      src: "{{ item.src }}"
+      dest: "{{ item.dest }}"
+      state: link
+    loop:
+      - { src: "/opt/{{ tomcat_dir_name }}/bin/startup.sh", dest: "/usr/local/bin/tomcatup" }
+      - { src: "/opt/{{ tomcat_dir_name }}/bin/shutdown.sh", dest: "/usr/local/bin/tomcatdown" }
+
+  - name: start the services
+    shell: nohup /usr/local/bin/tomcatup &
+    args:
+      executable: /bin/bash
